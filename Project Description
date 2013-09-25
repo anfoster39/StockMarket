@@ -47,7 +47,6 @@ Structure:
 Ideas for future implementations  make the game harder:
     -Load parameters
     -Have range for economic indicators
-    -Have the stock price equation change slightly over time
     -Short and Long
        Let the player offer to buy or sell the stock at a price in the future. 
            Needed actions: 
@@ -58,5 +57,6 @@ Ideas for future implementations  make the game harder:
               sell at very high prices
              -Market must keep a record of the trade to happen in the future
     -Add small charge for each transaction 
+    -Have the stock price equation change slightly over time
     -Adjust Stock price depending on the player's buying and selling actions
     -GUI

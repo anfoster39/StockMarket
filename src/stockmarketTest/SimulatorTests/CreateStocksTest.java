@@ -11,7 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import stockmarket.Simulator;
+import stockmarket.sim.Simulator;
 
 /**
  * @author Anne
@@ -23,9 +23,7 @@ Random random = new Random();
 
 	@Test
 	public void test() {
-		for(int i = 0; i < 100; i++){
-			System.out.println(random.nextInt() % 10);
-		}
+		test.run();
 	}
 
 }

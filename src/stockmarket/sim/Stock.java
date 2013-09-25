@@ -1,7 +1,7 @@
 /**
  * 
  */
-package stockmarket;
+package stockmarket.sim;
 
 import java.util.HashMap;
 

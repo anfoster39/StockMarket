@@ -1,7 +1,7 @@
 /**
  * 
  */
-package stockmarket;
+package stockmarket.sim;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +13,9 @@ import java.util.HashMap;
  * the player to trade and completes the buy or sell. 
  */
 public class Market {
+	public static final int BUY    = 1;
+	public static final int SELL   = -1;
+	
 	private ArrayList<Stock> stocks;
 	private ArrayList<EconomicIndicator> indicators;
 	private ArrayList<Player> players;
@@ -38,12 +41,14 @@ public class Market {
 			if (trade == null){
 				continue;
 			}
-			if(trade.type == -1){
+			if(trade.type == SELL){
 				portfolios.get(player).sellStock(trade.stock, trade.quantity);
 			}
-			if(trade.type == 1){
+			if(trade.type == BUY){
 				portfolios.get(player).buyStock(trade.stock, trade.quantity);
 			}
+			System.out.println(player.name + " Portfolio: ");
+			System.out.print(portfolios.get(player));
 		}
 	}
 
@@ -55,7 +60,7 @@ public class Market {
 	}
 
 	/**
-	 * 
+	 * Prints all portfolios
 	 */
 	public void printPorfolios() {
 		for (Player player : players){

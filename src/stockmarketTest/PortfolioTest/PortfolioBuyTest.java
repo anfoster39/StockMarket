@@ -9,8 +9,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import stockmarket.Portfolio;
-import stockmarket.Stock;
+import stockmarket.sim.Portfolio;
+import stockmarket.sim.Stock;
 
 /**
  * Tests the portfolio class buy method

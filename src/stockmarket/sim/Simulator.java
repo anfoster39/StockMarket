@@ -1,7 +1,7 @@
 /**
  * 
  */
-package stockmarket;
+package stockmarket.sim;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +23,6 @@ import java.lang.Math;
  */
 public class Simulator {
 
-	private static final String     NAME                			= "CIS 700 - Fall 2013 - StockMarket 0.1";
     private static Random           random;
 	private double 					STARTING_CAPITAL				=100000;
 	private int 					NUM_STOCKS						=10;
@@ -89,11 +88,12 @@ public class Simulator {
 	 * 
 	 */
 	private void initializePlayers() {
-		//TODO 
+		players.add(new stockmarket.g0.RandomPlayer());
 		
 	}
 
 	private void createIndicators(){
+		//TODO Get from File
 		indicators.add(new EconomicIndicator("Unemployment", 0));
 		indicators.add(new EconomicIndicator("GDP", 0));
 		indicators.add(new EconomicIndicator("Inflation", 0));

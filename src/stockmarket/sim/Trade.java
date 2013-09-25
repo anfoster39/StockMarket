@@ -1,7 +1,7 @@
 /**
  * 
  */
-package stockmarket;
+package stockmarket.sim;
 
 /**
  * This holds the info the Market uses to make a trade 

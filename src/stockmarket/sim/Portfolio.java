@@ -1,7 +1,7 @@
 /**
  * 
  */
-package stockmarket;
+package stockmarket.sim;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -43,7 +43,7 @@ public class Portfolio {
 	 */
 	public boolean buyStock(Stock stock, int amount){
 		if(capital < stock.getPrice() * amount) {
-			//print system error? "portfolio does not have the money to buy sock"
+			System.out.println("Trade to Buy " + stock.getName() + " failed: You do nothave enough money");
 			return false;
 		}
 		capital -= stock.getPrice() * amount;
@@ -66,12 +66,12 @@ public class Portfolio {
 	 */
 	public boolean sellStock(Stock stock, int amount){
 		if (!stocks.containsKey(stock)){
-			//print system error? "You do not own that stock"
+			System.out.println("Trade to Sell " + stock.getName() + " failed: You do not own any stock in this company");
 			return false;
 		}
 		int holding = stocks.get(stock);
 		if (holding < amount){
-			//print system error? "You do not have that much stock to sell"
+			System.out.println("Trade to Sell " + stock.getName() + " failed: You do not own enough stock");
 			return false;
 		}
 		stocks.put(stock, holding - amount);
