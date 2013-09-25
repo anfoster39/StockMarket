@@ -1,0 +1,62 @@
+The project is a simulation of the stock market where players get a number of 
+stocks and economic indicators on which the stock price is based on. The player
+then needs to apply machine learning to predict the stock prices and buy and 
+sell the stocks on the market to increase the value of their portfolio. 
+
+Structure:
+    Simulator Class: this class generates the economic indicators and stock price
+    each round. It will first create the test data for the player to learn by
+    generating a number of rounds of economic indicators and stock prices.
+    It will then go into live mode where it notifies the Market it is a new 
+    round and give it the indicators whereafter the market will get the player
+    trades. The Simulator will then update the price of each stock based on a 
+    secret formula based on the economic indicators. This continues until the 
+    the round limit is hit or Player goes bankrupt. At the end of the game the 
+    Simulator prints out the score.
+    
+    Each Stock is calculated based off a formula in the form:
+    New Price = (Previous price) + (-1 - 1)*Indicator1 ... (-1 - 1) * IndicatorN  
+    + (.01 - .2) * previous price. 
+    
+    The starting price of the stock is anything from $10 to $500 and each indicator 
+    has a 20% chance of not affecting the stock. 
+    
+    The Economic indicators are changed randomly. With a future implementation idea 
+    to have them move in trends. 
+    
+    Market Class: this class holds the stocks, economic indicators and the 
+    player's portfolios. The Market begins by giving the Players the training
+    data and asking them to learn the stocks. Every subsequent round it asks 
+    the player to trade and completes the buy or sell. 
+    
+    Player Class: has two methods, Learn and Trade. The Learn method takes in the
+    starting historical data of the economic indicators and the stocks for the 
+    Player to build a model. The Trade method applies the stock model to the current
+    Economic Indicators and decides to buy or sell stocks and how much. It then tells
+    the market to place the trade by returning a list of trades for the market to 
+    process. 
+    
+    Stock Class: This holds the stock price and historical prices based on round
+    
+    Portfolio Class: This holds a player's current capital and their stocks
+    
+    Trade Class: This holds the info the Market uses to make a trade 
+        **This class might not be necessary**
+  
+  ------------
+Ideas for future implementations  make the game harder:
+    -Load parameters
+    -Have range for economic indicators
+    -Have the stock price equation change slightly over time
+    -Short and Long
+       Let the player offer to buy or sell the stock at a price in the future. 
+           Needed actions: 
+             -Economic indicators need to have trends (if going up, more
+              likely to go up)
+             -Simulator needs to create a band in which the price might be 
+              in to avoid the player offering to sell at very low price or 
+              sell at very high prices
+             -Market must keep a record of the trade to happen in the future
+    -Add small charge for each transaction 
+    -Adjust Stock price depending on the player's buying and selling actions
+    -GUI
