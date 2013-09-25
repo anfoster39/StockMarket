@@ -15,38 +15,34 @@ import java.util.HashMap;
 public class Market {
 	public static final int BUY    = 1;
 	public static final int SELL   = -1;
-	
-	private ArrayList<Stock> stocks;
-	private ArrayList<EconomicIndicator> indicators;
+
 	private ArrayList<Player> players;
 	private HashMap <Player, Portfolio> portfolios;
 	
-	public Market(ArrayList<Stock> _stocks, ArrayList<EconomicIndicator> _indicators, 
-				ArrayList<Player> _players, double startingCapital){
-		stocks = _stocks;
-		indicators = _indicators;
-		players = _players;
+	public Market(ArrayList<Player> players, double startingCapital){
+		this.players = players;
 		portfolios = new HashMap <Player, Portfolio>();
 		for (Player player : players){
 			portfolios.put(player, new Portfolio(startingCapital));
+			System.out.println("added a portfolio for " + player.name);
 		}
 	}
 
 	/**
 	 * @param indicators2
 	 */
-	public void newRound(int round) {
+	public void newRound(int round, ArrayList<EconomicIndicator> indicators, ArrayList<Stock> stocks) {
 		for (Player player : players){
-			Trade trade = player.placeTrade(round, indicators, stocks);
-			if (trade == null){
-				continue;
+			ArrayList<Trade> trades = player.placeTrade(round, indicators, stocks);
+			for (Trade trade : trades){
+				if(trade.type == SELL){
+					portfolios.get(player).sellStock(trade.stock, trade.quantity);
+				}
+				if(trade.type == BUY){
+					portfolios.get(player).buyStock(trade.stock, trade.quantity);
+				}
 			}
-			if(trade.type == SELL){
-				portfolios.get(player).sellStock(trade.stock, trade.quantity);
-			}
-			if(trade.type == BUY){
-				portfolios.get(player).buyStock(trade.stock, trade.quantity);
-			}
+			
 			System.out.println(player.name + " Portfolio: ");
 			System.out.print(portfolios.get(player));
 		}

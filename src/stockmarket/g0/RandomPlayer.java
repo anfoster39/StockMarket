@@ -24,6 +24,14 @@ public class RandomPlayer extends stockmarket.sim.Player{
 	@Override
 	public void learnStocks(ArrayList<EconomicIndicator> indicators,
 			ArrayList<Stock> stocks) {
+		System.out.println("Indicators");
+		for (EconomicIndicator indicator : indicators){
+			System.out.println(indicator);
+		}
+		System.out.println("Stocks");
+		for (Stock stock : stocks){
+			System.out.println(stock);
+		}
 		
 	}
 
@@ -31,7 +39,7 @@ public class RandomPlayer extends stockmarket.sim.Player{
 	 * @see stockmarket.sim.Player#placeTrade(int, java.util.ArrayList, java.util.ArrayList)
 	 */
 	@Override
-	public Trade placeTrade(int currentRound,
+	public ArrayList<Trade> placeTrade(int currentRound,
 			ArrayList<EconomicIndicator> indicators, ArrayList<Stock> stocks) {
 		Stock stockToTrade = stocks.get(Math.abs(random.nextInt()%10));
 		int tradeAmount = Math.abs(random.nextInt()%100);
@@ -39,8 +47,9 @@ public class RandomPlayer extends stockmarket.sim.Player{
 		if(Math.abs(random.nextInt() %1) > 0){
 			type = SELL;
 		}
-		return new Trade(type, stockToTrade, tradeAmount);
-		
+		ArrayList<Trade> trades = new ArrayList<Trade>();
+		trades.add(new Trade(type, stockToTrade, tradeAmount));
+		return trades;
 	}
 
 	

@@ -22,7 +22,7 @@ public abstract class Player {
 	public abstract void learnStocks(ArrayList<EconomicIndicator> indicators,
 			ArrayList<Stock> stocks);
 
-	public abstract Trade placeTrade(int currentRound, ArrayList<EconomicIndicator> indicators,
+	public abstract ArrayList<Trade> placeTrade(int currentRound, ArrayList<EconomicIndicator> indicators,
 			ArrayList<Stock> stocks);
 	
 }

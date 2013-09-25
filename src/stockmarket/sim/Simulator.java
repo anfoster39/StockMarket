@@ -25,20 +25,20 @@ public class Simulator {
 
     private static Random           random;
 	private double 					STARTING_CAPITAL				=100000;
-	private int 					NUM_STOCKS						=10;
+	public int 						NUM_STOCKS						=10;
     private static final int        MAX_ROUNDS     					=500;
-	private int						TRAINING_ROUNDS					=25;
+	private static final int		TRAINING_ROUNDS					=25;
 	private static final double		PROB_NO_INFLUANCE	  		 	=.2;
 	private static final double		RANDOM_STOCK_VARIATIONLIMIT 	=.2;
-	private static final int		STOCK_MAX_PRICE					= 500;
-	private static final int		STOCK_MIN_PRICE					= 10;
+	public static final int			STOCK_MAX_PRICE					= 500;
+	public static final int			STOCK_MIN_PRICE					= 10;
 
-	private HashMap <Stock, ArrayList<Double>> calculateStocks; 
-	private ArrayList<EconomicIndicator> indicators;
-	private ArrayList<Stock> stocks;
-	private ArrayList<Player> players;
+	public HashMap <Stock, ArrayList<Double>> calculateStocks; 
+	public ArrayList<EconomicIndicator> indicators;
+	public ArrayList<Stock> stocks;
+	public ArrayList<Player> players;
 	public ArrayList<String> stockNames;
-	private Market market;
+	public Market market;
 	
 	public Simulator(){
 		random = new Random();
@@ -50,12 +50,13 @@ public class Simulator {
 		indicators = new ArrayList<EconomicIndicator> ();
 		stocks = new ArrayList<Stock>();
 		players = new ArrayList<Player>();
+		calculateStocks = new HashMap <Stock, ArrayList<Double>>();
 		
 		createIndicators();
 		createStocks();
 		initializePlayers();
 		
-		market = new Market(stocks, indicators, players, STARTING_CAPITAL);
+		market = new Market(players, STARTING_CAPITAL);
 		
 		for (round = 0; round < TRAINING_ROUNDS; round++){
 			updateIndicators(round);
@@ -68,7 +69,7 @@ public class Simulator {
 		
 		while (market.allNotBankrupt() && round <= MAX_ROUNDS){
 			updateIndicators(round);
-			market.newRound(round);
+			market.newRound(round, indicators, stocks);
 			updateStockPrice(round);
 			round++;
 		}
@@ -92,13 +93,13 @@ public class Simulator {
 		
 	}
 
-	private void createIndicators(){
+	public void createIndicators(){
 		//TODO Get from File
-		indicators.add(new EconomicIndicator("Unemployment", 0));
-		indicators.add(new EconomicIndicator("GDP", 0));
-		indicators.add(new EconomicIndicator("Inflation", 0));
-		indicators.add(new EconomicIndicator("Exports", 0));
-		indicators.add(new EconomicIndicator("Imports", 0));
+		indicators.add(new EconomicIndicator("Unemployment", 5));
+		indicators.add(new EconomicIndicator("GDP", 13.263));
+		indicators.add(new EconomicIndicator("Inflation", 2.01));
+		indicators.add(new EconomicIndicator("Exports", 3.52));
+		indicators.add(new EconomicIndicator("Imports", 6.93));
 	}
 
 	/**
@@ -108,12 +109,12 @@ public class Simulator {
 	public void createStocks(){
 		//does not check case where all coefficients are 0 
 		for (int i = 0; i < NUM_STOCKS; i++){
-			stocks.add(new Stock (createStockName(), 0));
+			stocks.add(new Stock (createStockName(), getRandomBetween(STOCK_MIN_PRICE, STOCK_MAX_PRICE)));
 			ArrayList<Double> formula = new ArrayList<Double>();
-			formula.add(0, (random.nextDouble()*STOCK_MAX_PRICE + STOCK_MIN_PRICE)); 
 			for (int k = 0; k < indicators.size(); k++){
 				formula.add(generateCoefficient());
 			}
+			calculateStocks.put(stocks.get(i), formula);
 		}
 	}
 	
@@ -122,8 +123,8 @@ public class Simulator {
 	 */
 	public String createStockName(){
 		String name = "" + (char)('A' + Math.abs(random.nextInt() % 25)) +					
-							(char)('A' + Math.abs(random.nextInt() % 25)) + 
-							(char)('A' + Math.abs(random.nextInt() % 25));
+						   (char)('A' + Math.abs(random.nextInt() % 25)) + 
+						   (char)('A' + Math.abs(random.nextInt() % 25));
 		if(!stockNames.contains(name)){
 			stockNames.add(name);
 			return name;
@@ -137,18 +138,18 @@ public class Simulator {
 	 * certain percentage change of being 0
 	 * @return
 	 */
-	private double generateCoefficient(){
-		if (((Math.abs(random.nextInt()) % 10) / 10) < PROB_NO_INFLUANCE) return 0.0; 
-		else {
-			return random.nextDouble(); 
-		}
+	public double generateCoefficient(){
+		if (random.nextDouble() < PROB_NO_INFLUANCE) return 0.0; 
+		int coefficient = 1; 
+		if(random.nextBoolean()) coefficient = -1;
+		return (coefficient * random.nextDouble()); 
 	}
 	
 	/**
 	 * Randomly changes the values of the indicators
 	 * @param round
 	 */
-	private void updateIndicators(int round){
+	public void updateIndicators(int round){
 		for(EconomicIndicator indicator: indicators){
 			indicator.updateValue(round, indicator.getValue()*(1 + random.nextDouble()) );
 		}
@@ -158,7 +159,7 @@ public class Simulator {
 	 * Updates each stock price
 	 * @param round
 	 */
-	private void updateStockPrice(int round){
+	public void updateStockPrice(int round){
 		for (Stock stock: stocks){
 			stock.updatePrice(round, updateStockPrice(stock));
 		}
@@ -175,9 +176,13 @@ public class Simulator {
 		newPrice += RANDOM_STOCK_VARIATIONLIMIT * random.nextDouble();
 		//change from indicators
 		for (int i = 0; i < indicators.size(); i++){
-			newPrice += indicators.get(i).getValue() * calculateStocks.get(stock).get(i+1);
+			newPrice += indicators.get(i).getValue() * calculateStocks.get(stock).get(i);
 		}
 		return newPrice;
+	}
+	
+	private double getRandomBetween(int lowerBound, int upperBound){
+		return random.nextDouble()*(upperBound-lowerBound) + lowerBound; 
 	}
 		
 }

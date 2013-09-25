@@ -17,6 +17,8 @@ public class EconomicIndicator {
 	public EconomicIndicator(String _name, double initialValue){
 		name = _name;
 		value = initialValue;
+		history = new HashMap<Integer, Double>();
+		history.put(0, initialValue);
 	}
 	
 	public void updateValue (Integer round, double newValue){
