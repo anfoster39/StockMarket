@@ -30,6 +30,10 @@ public class EconomicIndicator {
 		return value;
 	}
 	
+	public double getValueAtRound(int round){
+		return history.get(round);
+	}
+	
 	public HashMap<Integer, Double> getHistory(){
 		return history;
 	}

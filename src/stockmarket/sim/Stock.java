@@ -30,6 +30,10 @@ public class Stock {
 		return price;
 	}
 	
+	public double getPriceAtRound(int round){
+		return priceHistory.get(round);
+	}
+	
 	public HashMap<Integer, Double> getPriceHistory(){
 		return priceHistory;
 	}

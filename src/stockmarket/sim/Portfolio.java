@@ -43,7 +43,7 @@ public class Portfolio {
 	 */
 	public boolean buyStock(Stock stock, int amount){
 		if(capital < stock.getPrice() * amount) {
-			System.out.println("Trade to Buy " + stock.getName() + " failed: You do nothave enough money");
+			System.out.println("Trade to Buy " + stock.getName() + " failed: You do not have enough money");
 			return false;
 		}
 		capital -= stock.getPrice() * amount;
@@ -96,13 +96,14 @@ public class Portfolio {
 	
 	@Override
 	public String toString(){
-		String portfolioString =  "Capital: " + capital + "\n" + 
-				"Stocks:\n";
+		String portfolioString =  
+				"Capital: " + capital + "\n" 
+			  + "Stocks:\n";
 		for (Stock stock : stocks.keySet()){
 			portfolioString += stock.getName() + ", " + stocks.get(stock) + " Shares\n";
 		}
 		portfolioString += "Monetary Value: " + monetaryValue();
-		portfolioString += "\n Profit / Loss: " + startingMoney;
+		portfolioString += "\nProfit / Loss: " + startingMoney+ "\n";
 		return portfolioString;
 	}
 	

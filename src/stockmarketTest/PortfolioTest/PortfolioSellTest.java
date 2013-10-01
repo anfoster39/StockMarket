@@ -5,7 +5,6 @@ package stockmarketTest.PortfolioTest;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,28 +37,31 @@ public class PortfolioSellTest {
 	public void testSellOK() {
 		assertTrue(testing.sellStock(stock1, 10));
 		assertEquals(10000, testing.monetaryValue(), 001);
-		assertEquals(testing.toString(), "Capital: 9900.0"+
-										"\nStocks:" + 
-										"\nABC, 10 Shares" + 
-										"\nValue: 10000.0");
+		assertEquals(testing.toString(), "Capital: 9900.0"
+										+"\nStocks:" 
+										+"\nABC, 10 Shares" 
+										+"\nMonetary Value: 10000.0"
+										+"\nProfit / Loss: 10000.0\n");
 	}
 	
 	@Test
 	public void testSellTooManyShares() {
 		assertFalse(testing.sellStock(stock1, 30));
-		assertEquals(testing.toString(), "Capital: 9800.0"+
-										"\nStocks:" + 
-										"\nABC, 20 Shares" + 
-										"\nValue: 10000.0");
+		assertEquals(testing.toString(), "Capital: 9800.0"
+										+"\nStocks:" 
+										+"\nABC, 20 Shares" 
+										+"\nMonetary Value: 10000.0"
+										+"\nProfit / Loss: 10000.0\n");
 	}
 	
 	@Test
 	public void testSellNotOwnedShares() {
 		assertFalse(testing.sellStock(stock2, 1));
-		assertEquals(testing.toString(), "Capital: 9800.0"+
-										"\nStocks:" + 
-										"\nABC, 20 Shares" + 
-										"\nValue: 10000.0");
+		assertEquals(testing.toString(),  "Capital: 9800.0"
+										+"\nStocks:" 
+										+"\nABC, 20 Shares" 
+										+"\nMonetary Value: 10000.0"
+										+"\nProfit / Loss: 10000.0\n");
 	}
 	
 

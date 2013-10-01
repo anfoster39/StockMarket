@@ -8,7 +8,6 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -51,6 +50,18 @@ public class UpdateStockPriceTest {
 	public void testIndicatorHisotry(){
 		for (int i = 0; i < test.stocks.size(); i++){
 			assertEquals(oldValues.get(i), test.stocks.get(i).getPriceHistory().get(0), .001);
+		}
+	}
+	
+	@Test
+	public void testNormalPriceRange(){
+		test.updateIndicators(2);
+		test.updateStockPrice(2);
+		String messageMax = "Stock price is above the max price";
+		String messageMin = "Stock price is below the minimum price";
+		for (int i = 0; i < test.stocks.size(); i++){
+			assertTrue(messageMin, test.stocks.get(i).getPrice() >= Simulator.STOCK_MIN_PRICE);
+			assertTrue(messageMax, test.stocks.get(i).getPrice() <= Simulator.STOCK_MAX_PRICE);
 		}
 	}
 

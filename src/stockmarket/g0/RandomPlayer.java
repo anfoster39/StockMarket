@@ -15,12 +15,14 @@ import stockmarket.sim.Trade;
  *
  */
 public class RandomPlayer extends stockmarket.sim.Player{
-	static final String name = "Random Player";
-	private Random random = new Random();
 	
-	/* (non-Javadoc)
-	 * @see stockmarket.sim.Player#learnStocks(java.util.ArrayList, java.util.ArrayList)
-	 */
+	private Random random;
+	
+	public RandomPlayer(){
+		name = "Random Player";
+		random = new Random();
+	}
+	
 	@Override
 	public void learnStocks(ArrayList<EconomicIndicator> indicators,
 			ArrayList<Stock> stocks) {
@@ -35,9 +37,6 @@ public class RandomPlayer extends stockmarket.sim.Player{
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see stockmarket.sim.Player#placeTrade(int, java.util.ArrayList, java.util.ArrayList)
-	 */
 	@Override
 	public ArrayList<Trade> placeTrade(int currentRound,
 			ArrayList<EconomicIndicator> indicators, ArrayList<Stock> stocks) {
@@ -52,7 +51,5 @@ public class RandomPlayer extends stockmarket.sim.Player{
 		return trades;
 	}
 
-	
-	
 	
 }

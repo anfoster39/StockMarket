@@ -67,7 +67,7 @@ public class Simulator {
 			player.learnStocks(indicators, stocks);
 		}
 		
-		while (market.allNotBankrupt() && round <= MAX_ROUNDS){
+		while (!market.allBankrupt() && round <= MAX_ROUNDS){
 			updateIndicators(round);
 			market.newRound(round, indicators, stocks);
 			updateStockPrice(round);
@@ -89,6 +89,7 @@ public class Simulator {
 	 * 
 	 */
 	private void initializePlayers() {
+		//TODO Get from file
 		players.add(new stockmarket.g0.RandomPlayer());
 		
 	}
@@ -111,13 +112,43 @@ public class Simulator {
 		for (int i = 0; i < NUM_STOCKS; i++){
 			stocks.add(new Stock (createStockName(), getRandomBetween(STOCK_MIN_PRICE, STOCK_MAX_PRICE)));
 			ArrayList<Double> formula = new ArrayList<Double>();
-			for (int k = 0; k < indicators.size(); k++){
-				formula.add(generateCoefficient());
-			}
+			do{
+				for (int k = 0; k < indicators.size(); k++){
+					formula.add(generateCoefficient());
+				}	
+			} while (formulaOK(i, formula));
 			calculateStocks.put(stocks.get(i), formula);
 		}
 	}
 	
+	/**
+	 * @param i
+	 * @return
+	 */
+	private boolean formulaOK(int stockIndex, ArrayList<Double> formula) {
+		double calcPrice = 0;
+		//does the current calculation return an unusable price?
+		for (int i = 0; i < indicators.size(); i++){
+			calcPrice += (indicators.get(i).getValue()) * formula.get(i);
+		}
+		if(calcPrice > STOCK_MAX_PRICE || calcPrice < STOCK_MIN_PRICE) return false;
+		
+		//Will a very high indicator result in an unusable price?
+		calcPrice = 0;
+		for (int i = 0; i < indicators.size(); i++){
+			calcPrice += (indicators.get(i).getValue()*2) * formula.get(i);
+		}
+		if(calcPrice > STOCK_MAX_PRICE || calcPrice < STOCK_MIN_PRICE) return false;
+		
+		//Will a low indicator price result in an unusable price?
+		calcPrice = 0;
+		for (int i = 0; i < indicators.size(); i++){
+			calcPrice += (indicators.get(i).getValue()*.5) * formula.get(i);
+		}
+		if(calcPrice > STOCK_MAX_PRICE || calcPrice < STOCK_MIN_PRICE) return false;
+		return true;
+	}
+
 	/**
 	 * Generates 3 letter stock names and checks for duplicate names 
 	 */
@@ -147,11 +178,13 @@ public class Simulator {
 	
 	/**
 	 * Randomly changes the values of the indicators
+	 * by a value between -.01 and .01
 	 * @param round
 	 */
 	public void updateIndicators(int round){
 		for(EconomicIndicator indicator: indicators){
-			indicator.updateValue(round, indicator.getValue()*(1 + random.nextDouble()) );
+			indicator.updateValue(round, indicator.getValue()
+					*(1 + getRandomBetween(-.01, .01)) );
 		}
 	}
 	
@@ -181,8 +214,9 @@ public class Simulator {
 		return newPrice;
 	}
 	
-	private double getRandomBetween(int lowerBound, int upperBound){
-		return random.nextDouble()*(upperBound-lowerBound) + lowerBound; 
+	private double getRandomBetween(double lowerBound, double upperBound){
+		return (random.nextDouble()*(upperBound-lowerBound)) + lowerBound; 
 	}
+	
 		
 }

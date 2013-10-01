@@ -16,15 +16,15 @@ public class Market {
 	public static final int BUY    = 1;
 	public static final int SELL   = -1;
 
-	private ArrayList<Player> players;
-	private HashMap <Player, Portfolio> portfolios;
+	public ArrayList<Player> players;
+	public HashMap <Player, Portfolio> portfolios;
 	
-	public Market(ArrayList<Player> players, double startingCapital){
-		this.players = players;
+	public Market(ArrayList<Player> _players, double startingCapital){
+		players = _players;
 		portfolios = new HashMap <Player, Portfolio>();
 		for (Player player : players){
 			portfolios.put(player, new Portfolio(startingCapital));
-			System.out.println("added a portfolio for " + player.name);
+			System.out.println("added a portfolio for " + player.getName());
 		}
 	}
 
@@ -48,7 +48,7 @@ public class Market {
 		}
 	}
 
-	public Boolean allNotBankrupt(){
+	public Boolean allBankrupt(){
 		for (Portfolio portfolio : portfolios.values()){
 			if (portfolio.monetaryValue() > 0) return false;
 		}
@@ -60,7 +60,7 @@ public class Market {
 	 */
 	public void printPorfolios() {
 		for (Player player : players){
-			System.out.println(player.name + "final portfolio:");
+			System.out.println(player.name + " final portfolio:");
 			System.out.print(portfolios.get(player));
 		}
 	}

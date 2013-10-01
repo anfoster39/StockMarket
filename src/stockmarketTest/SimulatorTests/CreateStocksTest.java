@@ -42,7 +42,7 @@ Simulator test = new  Simulator();
 		test.NUM_STOCKS = 1;
 		test.createStocks();
 		Stock created = test.stocks.get(0);
-		assertTrue(message, created.getPrice() > Simulator.STOCK_MIN_PRICE && created.getPrice() < test.STOCK_MAX_PRICE);
+		assertTrue(message, created.getPrice() > Simulator.STOCK_MIN_PRICE && created.getPrice() < Simulator.STOCK_MAX_PRICE);
 	}
 	
 	@Test
