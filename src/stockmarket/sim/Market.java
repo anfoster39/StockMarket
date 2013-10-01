@@ -35,22 +35,22 @@ public class Market {
 		for (Player player : players){
 			ArrayList<Trade> trades = player.placeTrade(round, indicators, stocks);
 			for (Trade trade : trades){
-				if(trade.type == SELL){
-					portfolios.get(player).sellStock(trade.stock, trade.quantity);
+				if(trade.getType() == SELL){
+					portfolios.get(player).sellStock(trade.getStock(), trade.getQuantity());
 				}
-				if(trade.type == BUY){
-					portfolios.get(player).buyStock(trade.stock, trade.quantity);
+				if(trade.getType() == BUY){
+					portfolios.get(player).buyStock(trade.getStock(), trade.getQuantity());
 				}
 			}
 			
-			System.out.println(player.name + " Portfolio: ");
+			System.out.println("\n" + player.name + " Portfolio: ");
 			System.out.print(portfolios.get(player));
 		}
 	}
 
 	public Boolean allBankrupt(){
 		for (Portfolio portfolio : portfolios.values()){
-			if (portfolio.monetaryValue() > 0) return false;
+			if (portfolio.getMonetaryValue() > 0) return false;
 		}
 		return true;
 	}
@@ -60,7 +60,7 @@ public class Market {
 	 */
 	public void printPorfolios() {
 		for (Player player : players){
-			System.out.println(player.name + " final portfolio:");
+			System.out.println("\n" + player.name + " final portfolio:");
 			System.out.print(portfolios.get(player));
 		}
 	}

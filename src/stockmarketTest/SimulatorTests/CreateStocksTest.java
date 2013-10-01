@@ -37,24 +37,46 @@ Simulator test = new  Simulator();
 	}
 	
 	@Test
-	public void initialStockPriceOKTest() {
+	public void initialStockPriceInRangeTest() {
 		String message = "createStocks did not create an initial price between the stock min and max price";
-		test.NUM_STOCKS = 1;
+		test.NUM_STOCKS = 100;
 		test.createStocks();
-		Stock created = test.stocks.get(0);
-		assertTrue(message, created.getPrice() > Simulator.STOCK_MIN_PRICE && created.getPrice() < Simulator.STOCK_MAX_PRICE);
+		for (int i = 0; i < test.NUM_STOCKS; i++ ){
+			Stock created = test.stocks.get(i);
+			assertTrue(message, (created.getPrice() >= Simulator.STOCK_MIN_PRICE) 
+							 && (created.getPrice() <= Simulator.STOCK_MAX_PRICE));
+		}
+		
 	}
 	
 	@Test
-	public void stockFormulaOKTest() {
-		String message = "createStocks did not creat the corrct number of coefficients to calcualte price";
+	public void stockCoefficientsInRangeTest() {
+		String message = "createStocks did not create the corrct number of coefficients to calculate price";
 		String message2 = "coefficents are not in the correct range";
-		test.NUM_STOCKS = 1;
+		test.NUM_STOCKS = 100;
 		test.createStocks();
-		ArrayList<Double> formula = test.calculateStocks.get(test.stocks.get(0));
-		assertEquals(message, test.indicators.size(), formula.size());
-		for(Double coefficient : formula){
-			assertTrue (message2, coefficient >= -1 && coefficient <= 1);
+		for (int i = 0; i < test.NUM_STOCKS; i++ ){
+			ArrayList<Double> formula = test.calculateStocks.get(test.stocks.get(0));
+			assertEquals(message, test.indicators.size(), formula.size());
+			for(Double coefficient : formula){
+				assertTrue (message2, coefficient >= -1 && coefficient <= 1);
+			}	
+		}	
+	}
+	
+	@Test
+	public void stockFormulaProducePriceInRange() {
+		String highMessage = "createStocks created a formula that made stock price above the max";
+		String lowMessage = "createStocks created a formula that made stock price below the min";
+		test.NUM_STOCKS = 100;
+		test.createStocks();
+		for (int i = 0; i < test.NUM_STOCKS; i++){
+			for(Stock stock : test.stocks){
+				double price = test.updateStockPrice(stock);
+				//System.out.println("" + stock + "price: " + price);
+				assertTrue(lowMessage,  price >= Simulator.STOCK_MIN_PRICE); 
+				assertTrue(highMessage, price <= Simulator.STOCK_MAX_PRICE);
+			}
 		}
 	}
 	

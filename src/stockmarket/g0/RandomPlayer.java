@@ -48,6 +48,7 @@ public class RandomPlayer extends stockmarket.sim.Player{
 		}
 		ArrayList<Trade> trades = new ArrayList<Trade>();
 		trades.add(new Trade(type, stockToTrade, tradeAmount));
+		System.out.println(trades.get(0));
 		return trades;
 	}
 

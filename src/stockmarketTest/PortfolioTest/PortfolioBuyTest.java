@@ -36,7 +36,7 @@ public class PortfolioBuyTest {
 	@Test
 	public void testBuyOK() {
 		assertTrue(testing.buyStock(stock1, 10));
-		assertEquals(10000, testing.monetaryValue(), 001);
+		assertEquals(10000, testing.getMonetaryValue(), 001);
 		assertEquals(testing.toString(), "Capital: 9900.0"
 										+"\nStocks:" 
 										+"\nABC, 10 Shares" 
@@ -47,7 +47,7 @@ public class PortfolioBuyTest {
 	@Test
 	public void testBuyNotEnoughMoney() {
 		assertFalse(testing.buyStock(stock2, 10));
-		assertEquals(10000, testing.monetaryValue(), 001);
+		assertEquals(10000, testing.getMonetaryValue(), 001);
 		assertEquals(testing.toString(), "Capital: 10000.0"
 										+"\nStocks:"  
 										+"\nMonetary Value: 10000.0"

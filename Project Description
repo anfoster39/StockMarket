@@ -14,6 +14,8 @@ Structure:
     the round limit is hit or Player goes bankrupt. At the end of the game the 
     Simulator prints out the score.
     
+    **proposed update game ends when loss == starting capital
+    
     Each Stock is calculated based off a formula in the form:
     New Price = (Previous price) + (-1 - 1)*Indicator1 ... (-1 - 1) * IndicatorN  
     + (.01 - .2) * previous price. 
@@ -44,9 +46,10 @@ Structure:
         **This class might not be necessary**
   
   ------------
-Ideas for future implementations  make the game harder:
+Ideas for future implementations:
     -Load parameters
     -Have range for economic indicators
+    -Println for failure to buy changes to warnings
     -Short and Long
        Let the player offer to buy or sell the stock at a price in the future. 
            Needed actions: 

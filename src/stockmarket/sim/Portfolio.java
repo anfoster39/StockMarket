@@ -11,8 +11,8 @@ import java.util.Set;
  *
  */
 public class Portfolio {
-	private double capital;
-	private HashMap <Stock, Integer> stocks;
+	public double capital;
+	public HashMap <Stock, Integer> stocks;
 	private double startingMoney; 
 	
 	public Portfolio (double startingCapital){
@@ -26,7 +26,7 @@ public class Portfolio {
 	 * Calculates the monetary value of the portfolio
 	 * @return the monetary value of the portfolio
 	 */
-	public double monetaryValue(){
+	public double getMonetaryValue(){
 		double value = capital;
 		for (Stock stock : stocks.keySet()){
 			value += stock.getPrice() * stocks.get(stock);
@@ -74,7 +74,13 @@ public class Portfolio {
 			System.out.println("Trade to Sell " + stock.getName() + " failed: You do not own enough stock");
 			return false;
 		}
-		stocks.put(stock, holding - amount);
+		int remaining = holding - amount;
+		if (remaining == 0){
+			stocks.remove(stock);
+		}
+		else {
+			stocks.put(stock, holding - amount);	
+		}
 		capital += (stock.getPrice() * amount);
 		return true;
 	}
@@ -93,6 +99,10 @@ public class Portfolio {
 		return stocks.keySet();
 	}
 	
+	public double getProfit(){
+		return getMonetaryValue() - startingMoney; 
+	}
+	
 	
 	@Override
 	public String toString(){
@@ -102,8 +112,8 @@ public class Portfolio {
 		for (Stock stock : stocks.keySet()){
 			portfolioString += stock.getName() + ", " + stocks.get(stock) + " Shares\n";
 		}
-		portfolioString += "Monetary Value: " + monetaryValue();
-		portfolioString += "\nProfit / Loss: " + startingMoney+ "\n";
+		portfolioString += "Monetary Value: " + getMonetaryValue();
+		portfolioString += "\nProfit / Loss: " + getProfit() + "\n";
 		return portfolioString;
 	}
 	

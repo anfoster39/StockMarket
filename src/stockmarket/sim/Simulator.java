@@ -26,7 +26,7 @@ public class Simulator {
     private static Random           random;
 	private double 					STARTING_CAPITAL				=100000;
 	public int 						NUM_STOCKS						=10;
-    private static final int        MAX_ROUNDS     					=500;
+    private static final int        MAX_ROUNDS     					=50;
 	private static final int		TRAINING_ROUNDS					=25;
 	private static final double		PROB_NO_INFLUANCE	  		 	=.2;
 	private static final double		RANDOM_STOCK_VARIATIONLIMIT 	=.2;
@@ -111,12 +111,13 @@ public class Simulator {
 		//does not check case where all coefficients are 0 
 		for (int i = 0; i < NUM_STOCKS; i++){
 			stocks.add(new Stock (createStockName(), getRandomBetween(STOCK_MIN_PRICE, STOCK_MAX_PRICE)));
-			ArrayList<Double> formula = new ArrayList<Double>();
+			ArrayList<Double> formula;
 			do{
+				formula = new ArrayList<Double>();
 				for (int k = 0; k < indicators.size(); k++){
 					formula.add(generateCoefficient());
 				}	
-			} while (formulaOK(i, formula));
+			} while (!formulaOK(i, formula));
 			calculateStocks.put(stocks.get(i), formula);
 		}
 	}
@@ -133,19 +134,22 @@ public class Simulator {
 		}
 		if(calcPrice > STOCK_MAX_PRICE || calcPrice < STOCK_MIN_PRICE) return false;
 		
-		//Will a very high indicator result in an unusable price?
+		//Will all indicators very high result in an unusable price?
 		calcPrice = 0;
 		for (int i = 0; i < indicators.size(); i++){
-			calcPrice += (indicators.get(i).getValue()*2) * formula.get(i);
+			calcPrice += (indicators.get(i).getValue()*3) * formula.get(i);
 		}
 		if(calcPrice > STOCK_MAX_PRICE || calcPrice < STOCK_MIN_PRICE) return false;
 		
-		//Will a low indicator price result in an unusable price?
+		//Will all indicators very low result in an unusable price?
 		calcPrice = 0;
 		for (int i = 0; i < indicators.size(); i++){
 			calcPrice += (indicators.get(i).getValue()*.5) * formula.get(i);
 		}
 		if(calcPrice > STOCK_MAX_PRICE || calcPrice < STOCK_MIN_PRICE) return false;
+		
+		//TODO: Go through list and increase or decrease each indicator at a time
+		
 		return true;
 	}
 
@@ -204,7 +208,7 @@ public class Simulator {
 	 * @param stock
 	 * @return
 	 */
-	private double updateStockPrice(Stock stock){
+	public double updateStockPrice(Stock stock){
 		double newPrice = stock.getPrice();
 		newPrice += RANDOM_STOCK_VARIATIONLIMIT * random.nextDouble();
 		//change from indicators
