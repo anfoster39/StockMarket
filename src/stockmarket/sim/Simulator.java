@@ -71,6 +71,7 @@ public class Simulator {
 			updateIndicators(round);
 			market.newRound(round, indicators, stocks);
 			updateStockPrice(round);
+			market.printPorfolios();
 			round++;
 		}
 		

@@ -42,11 +42,9 @@ public class Market {
 					portfolios.get(player).buyStock(trade.getStock(), trade.getQuantity());
 				}
 			}
-			
-			System.out.println("\n" + player.name + " Portfolio: ");
-			System.out.print(portfolios.get(player));
 		}
 	}
+	
 
 	public Boolean allBankrupt(){
 		for (Portfolio portfolio : portfolios.values()){
@@ -60,7 +58,7 @@ public class Market {
 	 */
 	public void printPorfolios() {
 		for (Player player : players){
-			System.out.println("\n" + player.name + " final portfolio:");
+			System.out.println("\n" + player.name );
 			System.out.print(portfolios.get(player));
 		}
 	}

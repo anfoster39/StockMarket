@@ -43,23 +43,27 @@ Structure:
     Portfolio Class: This holds a player's current capital and their stocks
     
     Trade Class: This holds the info the Market uses to make a trade 
-        **This class might not be necessary**
   
   ------------
 Ideas for future implementations:
-    -Load parameters
-    -Have range for economic indicators
+    *Sell before the buy 
+    *Economic indicators need to have trends (if going up, more
+              likely to go up)
+                - if previous was negative, then a large % chance the next one is negative
+                    - if the amount going up is small a smaller chance of staying the same direction
+    *Adjust Stock price depending on the player's buying and selling actions
+    *Load parameters
+    *Have range for economic indicators
+        - 
     -Println for failure to buy changes to warnings
     -Short and Long
        Let the player offer to buy or sell the stock at a price in the future. 
            Needed actions: 
-             -Economic indicators need to have trends (if going up, more
-              likely to go up)
+             
              -Simulator needs to create a band in which the price might be 
               in to avoid the player offering to sell at very low price or 
               sell at very high prices
              -Market must keep a record of the trade to happen in the future
     -Add small charge for each transaction 
     -Have the stock price equation change slightly over time
-    -Adjust Stock price depending on the player's buying and selling actions
     -GUI
