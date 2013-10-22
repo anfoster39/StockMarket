@@ -16,36 +16,75 @@ public class Market {
 	public static final int BUY    = 1;
 	public static final int SELL   = -1;
 
-	public ArrayList<Player> players;
-	public HashMap <Player, Portfolio> portfolios;
+	private ArrayList<Player> players;
+	private HashMap <Player, Portfolio> portfolios;
+	private double transactionFee;
 	
-	public Market(ArrayList<Player> _players, double startingCapital){
-		players = _players;
+	public Market(ArrayList<Player> players, double startingCapital, double transactionFee){
+		this.players = players;
 		portfolios = new HashMap <Player, Portfolio>();
 		for (Player player : players){
-			portfolios.put(player, new Portfolio(startingCapital));
-			System.out.println("added a portfolio for " + player.getName());
+			portfolios.put(player, new Portfolio(startingCapital, transactionFee));
 		}
+		this.transactionFee = transactionFee;
+	}
+	
+	public void trainPlayers(ArrayList<EconomicIndicator> indicators, ArrayList<Stock> stocks){
+		for(Player player : players){
+			player.learnStocks(copyIndicaotrs(indicators), copyStocks(stocks));
+		}	
 	}
 
 	/**
-	 * @param indicators2
+	 * @param 
 	 */
-	public void newRound(int round, ArrayList<EconomicIndicator> indicators, ArrayList<Stock> stocks) {
+	public ArrayList<Trade> newRound(int round, ArrayList<EconomicIndicator> indicators, ArrayList<Stock> stocks) {
+		HashMap<String, Stock> stockMap = mapPrices(stocks);
+		ArrayList<Trade> allTrades = new ArrayList<Trade>();
 		for (Player player : players){
-			ArrayList<Trade> trades = player.placeTrade(round, indicators, stocks);
+			ArrayList<Trade> trades = player.placeTrade(round, 
+										copyIndicaotrs(indicators), copyStocks(stocks));
+			if (trades == null){
+				continue;
+			}
 			for (Trade trade : trades){
 				if(trade.getType() == SELL){
-					portfolios.get(player).sellStock(trade.getStock(), trade.getQuantity());
-				}
-				if(trade.getType() == BUY){
-					portfolios.get(player).buyStock(trade.getStock(), trade.getQuantity());
+					portfolios.get(player).sellStock(stockMap.get(trade.getStock().getName()), trade.getQuantity());
+					allTrades.add(trade);
 				}
 			}
+			for (Trade trade : trades){
+				if(trade.getType() == BUY){
+					portfolios.get(player).buyStock(stockMap.get(trade.getStock().getName()), trade.getQuantity());
+					allTrades.add(trade);
+				}
+			}
+			player.updatePortolio(portfolios.get(player).copy());
 		}
+		return allTrades;
 	}
 	
 
+	/**
+	 * @param stocks
+	 * @return
+	 */
+	private HashMap<String, Stock> mapPrices(ArrayList<Stock> stocks) {
+		HashMap<String, Stock> prices = new HashMap<String, Stock>();
+		for (Stock stock : stocks){
+			prices.put(stock.getName(), stock);
+		}
+		return prices;
+	}
+
+	public Portfolio getPortfolio(Player player){
+		return portfolios.get(player).copy();
+	}
+	
+	public double getTransactionFee() {
+		return transactionFee;
+	}
+	
 	public Boolean allBankrupt(){
 		for (Portfolio portfolio : portfolios.values()){
 			if (portfolio.getMonetaryValue() > 0) return false;
@@ -61,6 +100,22 @@ public class Market {
 			System.out.println("\n" + player.name );
 			System.out.print(portfolios.get(player));
 		}
+	}
+	
+	private ArrayList<Stock> copyStocks(ArrayList<Stock> original){
+		ArrayList<Stock> copy = new ArrayList<Stock>();
+		for (Stock item : original){
+			copy.add(item.copy());
+		}
+		return copy;
+	}
+	
+	private ArrayList<EconomicIndicator> copyIndicaotrs(ArrayList<EconomicIndicator> original){
+		ArrayList<EconomicIndicator> copy = new ArrayList<EconomicIndicator>();
+		for (EconomicIndicator item : original){
+			copy.add(item.copy());
+		}
+		return copy;
 	}
 	
 }

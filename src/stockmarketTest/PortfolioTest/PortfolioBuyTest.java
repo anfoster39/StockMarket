@@ -29,19 +29,19 @@ public class PortfolioBuyTest {
 		stock1 = new Stock ("ABC", 10.0);
 		stock2 = new Stock ("XYZ", 10000.0);
 		stock3 = new Stock ("MNO", 10.0);
-		testing = new Portfolio (10000.0);
+		testing = new Portfolio (10000.0, 5);
 	}
 
 
 	@Test
 	public void testBuyOK() {
 		assertTrue(testing.buyStock(stock1, 10));
-		assertEquals(10000, testing.getMonetaryValue(), 001);
-		assertEquals(testing.toString(), "Capital: 9900.0"
+		assertEquals(9995, testing.getMonetaryValue(), 001);
+		assertEquals(testing.toString(), "Capital: 9895.0"
 										+"\nStocks:" 
 										+"\nABC, 10 Shares" 
-										+"\nMonetary Value: 10000.0"
-										+"\nProfit / Loss: 10000.0\n");
+										+"\nMonetary Value: 9995.0"
+										+"\nProfit / Loss: -5.0\n");
 	}
 	
 	@Test
@@ -51,7 +51,7 @@ public class PortfolioBuyTest {
 		assertEquals(testing.toString(), "Capital: 10000.0"
 										+"\nStocks:"  
 										+"\nMonetary Value: 10000.0"
-										+"\nProfit / Loss: 10000.0\n");
+										+"\nProfit / Loss: 0.0\n");
 	}
 	
 

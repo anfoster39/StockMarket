@@ -18,6 +18,10 @@ public class Trade {
 	public Stock getStock() {
 		return stock;
 	}
+	
+	public String getStockName() {
+		return stock.getName();
+	}
 
 	public void setStock(Stock stock) {
 		this.stock = stock;
@@ -37,6 +41,10 @@ public class Trade {
 
 	public void setType(int type) {
 		this.type = type;
+	}	
+	
+	public double getCostBeforeTransactionFee() {
+		return (stock.getPrice() * quantity);
 	}	
 	
 	public Trade (int type, Stock stock, int quantity){

@@ -18,6 +18,7 @@ public abstract class Player {
 	public static final int BUY    = 1;
 	public static final int SELL   = -1;
 	public String name;
+	public Portfolio portfolio;
 
 	public abstract void learnStocks(ArrayList<EconomicIndicator> indicators,
 			ArrayList<Stock> stocks);
@@ -27,6 +28,10 @@ public abstract class Player {
 	
 	public String getName(){
 		return name;
+	}
+	
+	public void updatePortolio(Portfolio portfolio){
+		this.portfolio = portfolio;
 	}
 	
 }

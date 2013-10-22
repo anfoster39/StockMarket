@@ -15,7 +15,6 @@ import stockmarket.sim.Trade;
  *
  */
 public class RandomPlayer extends stockmarket.sim.Player{
-	
 	private Random random;
 	
 	public RandomPlayer(){
@@ -34,7 +33,6 @@ public class RandomPlayer extends stockmarket.sim.Player{
 		for (Stock stock : stocks){
 			System.out.println(stock);
 		}
-		
 	}
 
 	@Override
@@ -43,7 +41,7 @@ public class RandomPlayer extends stockmarket.sim.Player{
 		Stock stockToTrade = stocks.get(Math.abs(random.nextInt()%10));
 		int tradeAmount = Math.abs(random.nextInt()%100);
 		int type = BUY;
-		if(Math.abs(random.nextInt() %1) > 0){
+		if(Math.abs(random.nextInt() %2) > 0){
 			type = SELL;
 		}
 		ArrayList<Trade> trades = new ArrayList<Trade>();

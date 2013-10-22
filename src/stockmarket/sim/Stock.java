@@ -21,6 +21,12 @@ public class Stock {
 		priceHistory.put(0, initialPrice);
 	}
 	
+	public Stock (String _name, double currentPrice, HashMap<Integer, Double> history){
+		name = _name;
+		priceHistory = history; 
+		price = currentPrice;
+	}
+	
 	public void updatePrice (Integer round, double newPrice){
 		price = newPrice;
 		priceHistory.put(round, newPrice);
@@ -45,5 +51,13 @@ public class Stock {
 	@Override
 	public String toString(){
 		return "Stock " + name + ", Current Price: " + price; 
+	}
+	
+	public Stock copy(){
+		HashMap<Integer, Double> copyHistory = new HashMap<Integer, Double>();
+		for (Integer round : priceHistory.keySet()){
+			copyHistory.put(round, priceHistory.get(round));
+		}
+		return new Stock(name, price, copyHistory);
 	}
 }

@@ -14,8 +14,6 @@ Structure:
     the round limit is hit or Player goes bankrupt. At the end of the game the 
     Simulator prints out the score.
     
-    **proposed update game ends when loss == starting capital
-    
     Each Stock is calculated based off a formula in the form:
     New Price = (Previous price) + (-1 - 1)*Indicator1 ... (-1 - 1) * IndicatorN  
     + (.01 - .2) * previous price. 
@@ -46,24 +44,34 @@ Structure:
   
   ------------
 Ideas for future implementations:
-    *Sell before the buy 
-    *Economic indicators need to have trends (if going up, more
+
+    * Tweak Stock coefficients to have very different trends
+    * Market to give the portfolio during place trade
+
+    Done Make a copy of the indicators and stocks to give to the players
+            Done  make trade based on original stock price
+    Done - Be able to give a copy of the portfolio 
+    Done - Add small charge for each transaction 
+    Done - Load parameters
+    Done - update stock popularity price change to use current values
+
+    Done - Sell before the buy 
+    Done - Economic indicators need to have trends (if going up, more
               likely to go up)
                 - if previous was negative, then a large % chance the next one is negative
                     - if the amount going up is small a smaller chance of staying the same direction
-    *Adjust Stock price depending on the player's buying and selling actions
-    *Load parameters
-    *Have range for economic indicators
+    Done - Adjust Stock price depending on the player's buying and selling actions
+    
+    Done - Have range for economic indicators
         - 
     -Println for failure to buy changes to warnings
     -Short and Long
        Let the player offer to buy or sell the stock at a price in the future. 
            Needed actions: 
-             
              -Simulator needs to create a band in which the price might be 
               in to avoid the player offering to sell at very low price or 
               sell at very high prices
              -Market must keep a record of the trade to happen in the future
-    -Add small charge for each transaction 
-    -Have the stock price equation change slightly over time
+             
+             
     -GUI

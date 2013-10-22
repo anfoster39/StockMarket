@@ -15,11 +15,11 @@ import stockmarket.sim.Simulator;
  *
  */
 public class TestSim {
-	Simulator test = new  Simulator();
-	Random random = new Random();
+	Simulator test;
 
 		@Test
 		public void test() {
+			test = new  Simulator();
 			test.run();
 		}
 

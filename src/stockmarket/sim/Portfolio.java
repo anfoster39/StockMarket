@@ -11,15 +11,24 @@ import java.util.Set;
  *
  */
 public class Portfolio {
-	public double capital;
-	public HashMap <Stock, Integer> stocks;
+	private double capital;
+	private HashMap <Stock, Integer> stocks;
 	private double startingMoney; 
+	private double transactionFee; 
 	
-	public Portfolio (double startingCapital){
+	public Portfolio (double startingCapital, double transactionFee){
 		capital = startingCapital;
 		startingMoney = startingCapital;
-		stocks = new HashMap <Stock, Integer>(); 
-		
+		stocks = new HashMap <Stock, Integer>();
+		this.transactionFee = transactionFee;
+	}
+	
+	public Portfolio (double startingCapital, double currentCapital, 
+			     HashMap <Stock, Integer> Stocks, double transactionFee){
+		capital = currentCapital;
+		startingMoney = startingCapital;
+		stocks = new HashMap <Stock, Integer>();
+		this.transactionFee = transactionFee;
 	}
 	
 	/**
@@ -42,11 +51,11 @@ public class Portfolio {
 	 * @return If the buy went through
 	 */
 	public boolean buyStock(Stock stock, int amount){
-		if(capital < stock.getPrice() * amount) {
+		if(capital < (stock.getPrice() * amount) + transactionFee) {
 			System.out.println("Trade to Buy " + stock.getName() + " failed: You do not have enough money");
 			return false;
 		}
-		capital -= stock.getPrice() * amount;
+		capital -= (stock.getPrice() * amount) + transactionFee;
 		if (stocks.containsKey(stock)){
 			int oldAmount = stocks.get(stock);
 			stocks.put(stock, amount+oldAmount);
@@ -81,7 +90,7 @@ public class Portfolio {
 		else {
 			stocks.put(stock, holding - amount);	
 		}
-		capital += (stock.getPrice() * amount);
+		capital += (stock.getPrice() * amount) - transactionFee;
 		return true;
 	}
 	
@@ -103,6 +112,10 @@ public class Portfolio {
 		return getMonetaryValue() - startingMoney; 
 	}
 	
+	public double getCapital(){
+		return capital; 
+	}
+	
 	
 	@Override
 	public String toString(){
@@ -115,6 +128,14 @@ public class Portfolio {
 		portfolioString += "Monetary Value: " + getMonetaryValue();
 		portfolioString += "\nProfit / Loss: " + getProfit() + "\n";
 		return portfolioString;
+	}
+	
+	public Portfolio copy(){
+		HashMap <Stock, Integer> copyStocks = new HashMap <Stock, Integer>();
+		for (Stock stock : stocks.keySet()){
+			copyStocks.put(stock.copy(), stocks.get(stock));
+		}
+		return new Portfolio(startingMoney, capital, copyStocks, transactionFee);
 	}
 	
 }

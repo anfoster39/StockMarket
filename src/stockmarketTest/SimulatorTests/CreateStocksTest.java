@@ -7,10 +7,10 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import stockmarket.sim.EconomicIndicator;
 import stockmarket.sim.Simulator;
 import stockmarket.sim.Stock;
 
@@ -19,25 +19,24 @@ import stockmarket.sim.Stock;
  *
  */
 public class CreateStocksTest {
-Simulator test = new  Simulator();
+	Simulator test;
 
 	@Before
 	public void setUp(){
-		test.indicators = new ArrayList<EconomicIndicator> ();
-		test.stocks = new ArrayList<Stock>();
-		test.calculateStocks = new HashMap <Stock, ArrayList<Double>>();
-		test.createIndicators();
+		 test = new  Simulator();
 	}
 
 	@Test
 	public void CorrectNumberCreatedTest() {
-		String message = "createStocks did not creat the correct number of stocks";
-		test.createStocks();
+		String message = "created " + test.stocks.size() + ", but should have created " + test.NUM_STOCKS;
 		assertEquals(message, test.NUM_STOCKS, test.stocks.size());
 	}
 	
 	@Test
 	public void initialStockPriceInRangeTest() {
+		test.calculateStocks = new HashMap<Stock, ArrayList<Double>>();
+		test.stocks = new ArrayList<Stock>();
+		test.createStocks();
 		String message = "createStocks did not create an initial price between the stock min and max price";
 		test.NUM_STOCKS = 100;
 		test.createStocks();
@@ -66,17 +65,16 @@ Simulator test = new  Simulator();
 	
 	@Test
 	public void stockFormulaProducePriceInRange() {
-		String highMessage = "createStocks created a formula that made stock price above the max";
-		String lowMessage = "createStocks created a formula that made stock price below the min";
 		test.NUM_STOCKS = 100;
 		test.createStocks();
-		for (int i = 0; i < test.NUM_STOCKS; i++){
-			for(Stock stock : test.stocks){
-				double price = test.updateStockPrice(stock);
-				//System.out.println("" + stock + "price: " + price);
-				assertTrue(lowMessage,  price >= Simulator.STOCK_MIN_PRICE); 
-				assertTrue(highMessage, price <= Simulator.STOCK_MAX_PRICE);
-			}
+		assertEquals(5, test.indicators.size());
+		for(Stock stock : test.stocks){
+			double price = test.calculateStockPrice(stock, 1);
+			String lowMessage = "stock price " + price + " was smaller then the min of " + Simulator.STOCK_MIN_PRICE;
+			String highMessage = "stock price " + price + " was larger then the max of " + Simulator.STOCK_MAX_PRICE;
+			//System.out.println("" + stock + "price: " + price);
+			assertTrue(lowMessage,  price >= Simulator.STOCK_MIN_PRICE); 
+			assertTrue(highMessage, price <= Simulator.STOCK_MAX_PRICE);
 		}
 	}
 	

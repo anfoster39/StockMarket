@@ -24,7 +24,7 @@ public class ProfitTest {
 	@Before
 	public void setUp(){
 		stock1 = new Stock ("ABC", 1.0);
-		testing = new Portfolio (100.0);
+		testing = new Portfolio (100.0, 5);
 		testing.buyStock(stock1, 20);
 	}
 
@@ -32,10 +32,10 @@ public class ProfitTest {
 	public void test() {
 		String valueMessage = "Monetary Value not correct";
 		String message = "Profit calcualtion not correct";
-		assertEquals(valueMessage, 100, testing.getMonetaryValue(), .001);
+		assertEquals(valueMessage, 95, testing.getMonetaryValue(), .001);
 		stock1.updatePrice(2, 2.0);
-		assertEquals(valueMessage, 120, testing.getMonetaryValue(), .001);
-		assertEquals(message, 20, testing.getProfit(), .01);
+		assertEquals(valueMessage, 115, testing.getMonetaryValue(), .001);
+		assertEquals(message, 15, testing.getProfit(), .01);
 	}
 
 }
