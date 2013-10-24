@@ -7,29 +7,13 @@ package stockmarket.sim;
 
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Random;
 
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
-
-import org.apache.log4j.Logger;
-
 public class GameConfig implements Cloneable{
-	public Object clone()
-	{
-		GameConfig r = new GameConfig(this.confFileName);
-		r.num_players = this.num_players;
-		r.num_collectors = this.num_collectors;
-		r.number_of_rounds = this.number_of_rounds;
-		r.max_rounds = this.max_rounds;
-		r.playerClass = this.playerClass;
-		return r;
-	}
 	int number_of_rounds;
 	int current_round;
 	int max_rounds = max_rounds_max;
@@ -38,7 +22,6 @@ public class GameConfig implements Cloneable{
 	public static Random random;
 	private Properties props;
 	private String confFileName;
-	private Logger log = Logger.getLogger(this.getClass());
 	int num_players = 5;
 	int num_collectors = 1;
 	public static int threshold = 50;
@@ -98,7 +81,7 @@ public class GameConfig implements Cloneable{
 			FileInputStream in = new FileInputStream(confFileName);
 			props.loadFromXML(in);
 		} catch (IOException e) {
-			System.err.println("Error reading configuration file:"
+			System.out.println("Error reading configuration file:"
 					+ e.getMessage());
 			e.printStackTrace();
 			System.exit(-1);
@@ -122,7 +105,8 @@ public class GameConfig implements Cloneable{
 					availablePlayers.add((Class<Player>) Class
 							.forName(names[i]));
 				} catch (ClassNotFoundException e) {
-					log.error("[Configuration] Class not found: " + names[i]);
+					System.out.println("[Configuration] Class not found: " + names[i]);
+					System.exit(-1);
 				}
 			}
 		}
@@ -185,8 +169,10 @@ public class GameConfig implements Cloneable{
 				}
 			}
 		}
-		if (availablePlayers.size() == 0)
-			log.fatal("No player classes loaded!!!");
+		if (availablePlayers.size() == 0){
+			System.out.println("No player classes loaded!!!");
+			System.exit(-1);
+		}
 		if(props.getProperty("stockmarket.seed") != null)
 		{
 			long seed = Long.valueOf(props.getProperty("stockmarket.seed"));
@@ -194,17 +180,8 @@ public class GameConfig implements Cloneable{
 		}
 		else
 			random = new Random();
+		
 	}
-
-
-
-//	public ComboBoxModel getPlayerListModel() {
-//		DefaultComboBoxModel m = new DefaultComboBoxModel();
-//		for (Class c : availablePlayers) {
-//			m.addElement(c);
-//		}
-//		return m;
-//	}
 
 
 }

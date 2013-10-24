@@ -21,18 +21,8 @@ public class SimulatorGenerateCoefficentTest {
 	public void testCoefficientRange() {
 		for (int i = 0; i < 100; i++){
 			double coefficient = test.generateCoefficient();
-			assertTrue((coefficient <= 1) && (coefficient >=-1));
+			assertTrue((coefficient <= 10) && (coefficient >=-10));
 		}
-		}
-		
-	@Test
-	public void testCoefficient0prob() {
-		int count = 0;
-		for (int i = 0; i < 100; i++){
-			if (test.generateCoefficient() == 0.0){
-				count ++;
-			}
-		}
-		assertEquals(20, count, 14); //within 2 standard deviations
 	}
+		
 }

@@ -46,7 +46,7 @@ Structure:
 Ideas for future implementations:
 
     * Tweak Stock coefficients to have very different trends
-    * Market to give the portfolio during place trade
+    Done Market to give the portfolio during place trade
 
     Done Make a copy of the indicators and stocks to give to the players
             Done  make trade based on original stock price

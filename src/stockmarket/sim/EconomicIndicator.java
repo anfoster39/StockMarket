@@ -11,29 +11,29 @@ import java.util.HashMap;
  */
 public class EconomicIndicator {
 	private String name;
-	private double currentValue;
+	private double value;
 	private HashMap<Integer, Double> history;
 	
-	public EconomicIndicator(String _name, double initialValue){
-		name = _name;
-		currentValue = initialValue;
+	public EconomicIndicator(String name, double initialValue){
+		this.name = name;
+		value = initialValue;
 		history = new HashMap<Integer, Double>();
 		history.put(0, initialValue);
 	}
 	
-	public EconomicIndicator(String _name, double currentValue, HashMap<Integer, Double> _history){
+	public EconomicIndicator(String _name, double currentValue, HashMap<Integer, Double> history){
 		name = _name;
-		this.currentValue = currentValue;
-		history = _history;
+		this.value = currentValue;
+		this.history = history;
 	}
 	
 	public void updateValue (Integer round, double newValue){
-		currentValue = newValue;
+		value = newValue;
 		history.put(round, newValue);
 	}
 	
 	public double getValue(){
-		return currentValue;
+		return value;
 	}
 	
 	public double getValueAtRound(int round){
@@ -50,7 +50,7 @@ public class EconomicIndicator {
 	
 	@Override
 	public String toString(){
-		return "Economic Indicator " + name + ", Current Value: " + currentValue; 
+		return "Economic Indicator " + name + ", Current Value: " + value; 
 	}
 
 	public EconomicIndicator copy(){
@@ -58,7 +58,7 @@ public class EconomicIndicator {
 		for (Integer round : history.keySet()){
 			copyHistory.put(round, history.get(round));
 		}
-		return new EconomicIndicator(name, currentValue, copyHistory);
+		return new EconomicIndicator(name, value, copyHistory);
 	}
 	
 	

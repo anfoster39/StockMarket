@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import stockmarket.sim.EconomicIndicator;
+import stockmarket.sim.Portfolio;
 import stockmarket.sim.Stock;
 import stockmarket.sim.Trade;
 
@@ -37,7 +38,7 @@ public class RandomPlayer extends stockmarket.sim.Player{
 
 	@Override
 	public ArrayList<Trade> placeTrade(int currentRound,
-			ArrayList<EconomicIndicator> indicators, ArrayList<Stock> stocks) {
+			ArrayList<EconomicIndicator> indicators, ArrayList<Stock> stocks, Portfolio myPorfolio) {
 		Stock stockToTrade = stocks.get(Math.abs(random.nextInt()%10));
 		int tradeAmount = Math.abs(random.nextInt()%100);
 		int type = BUY;

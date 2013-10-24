@@ -24,7 +24,7 @@ public abstract class Player {
 			ArrayList<Stock> stocks);
 
 	public abstract ArrayList<Trade> placeTrade(int currentRound, ArrayList<EconomicIndicator> indicators,
-			ArrayList<Stock> stocks);
+			ArrayList<Stock> stocks, Portfolio myPorfolio);
 	
 	public String getName(){
 		return name;

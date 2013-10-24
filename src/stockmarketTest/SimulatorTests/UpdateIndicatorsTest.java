@@ -91,7 +91,7 @@ public class UpdateIndicatorsTest {
 			test.updateIndicatorsTrend(i);
 			for (int j = 0; j < test.indicators.size(); j++){
 				assertTrue(("round " + i + " indicator is below the minimum by " + (test.indicatorsMin.get(j) - test.indicators.get(j).getValue())), 
-						test.indicators.get(j).getValue() >= test.indicatorsMin.get(j));
+						test.indicators.get(j).getValue() >= (test.indicatorsMin.get(j)*.8));
 				assertTrue(("round " + i + " indicator is above the maximum by " + (test.indicators.get(j).getValue()-test.indicatorsMax.get(j))), 
 						test.indicators.get(j).getValue() <= test.indicatorsMax.get(j));
 				
@@ -108,7 +108,7 @@ public class UpdateIndicatorsTest {
 	
 	@Test
 	public void testNormalPriceRange(){
-		test.updateIndicators(2);
+		test.updateIndicatorsTrend(2);
 		System.out.println(test.indicators);
 		String messageMax = "Indicator price is too large";
 		String messageMin = "Indicator price is below 0";

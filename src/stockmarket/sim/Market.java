@@ -43,7 +43,7 @@ public class Market {
 		ArrayList<Trade> allTrades = new ArrayList<Trade>();
 		for (Player player : players){
 			ArrayList<Trade> trades = player.placeTrade(round, 
-										copyIndicaotrs(indicators), copyStocks(stocks));
+										copyIndicaotrs(indicators), copyStocks(stocks), portfolios.get(player).copy());
 			if (trades == null){
 				continue;
 			}
@@ -75,10 +75,6 @@ public class Market {
 			prices.put(stock.getName(), stock);
 		}
 		return prices;
-	}
-
-	public Portfolio getPortfolio(Player player){
-		return portfolios.get(player).copy();
 	}
 	
 	public double getTransactionFee() {
@@ -116,6 +112,10 @@ public class Market {
 			copy.add(item.copy());
 		}
 		return copy;
+	}
+
+	public Portfolio getPortfolio(Player player) {
+		return portfolios.get(player);
 	}
 	
 }
