@@ -13,12 +13,11 @@ import java.util.HashMap;
  * the player to trade and completes the buy or sell. 
  */
 public class Market {
-	public static final int BUY    = 1;
-	public static final int SELL   = -1;
 
 	private ArrayList<Player> players;
 	private HashMap <Player, Portfolio> portfolios;
-	private double transactionFee;
+	private static double marketTransactionFee ;
+	private static double playerStartingCapital;
 	
 	public Market(ArrayList<Player> players, double startingCapital, double transactionFee){
 		this.players = players;
@@ -26,8 +25,9 @@ public class Market {
 		for (Player player : players){
 			portfolios.put(player, new Portfolio(startingCapital, transactionFee));
 		}
-		this.transactionFee = transactionFee;
-	}
+		marketTransactionFee = transactionFee;
+		playerStartingCapital = startingCapital; 
+	}	
 	
 	public void trainPlayers(ArrayList<EconomicIndicator> indicators, ArrayList<Stock> stocks){
 		for(Player player : players){
@@ -48,18 +48,17 @@ public class Market {
 				continue;
 			}
 			for (Trade trade : trades){
-				if(trade.getType() == SELL){
+				if(trade.getType() == Trade.SELL){
 					portfolios.get(player).sellStock(stockMap.get(trade.getStock().getName()), trade.getQuantity());
 					allTrades.add(trade);
 				}
 			}
 			for (Trade trade : trades){
-				if(trade.getType() == BUY){
+				if(trade.getType() == Trade.BUY){
 					portfolios.get(player).buyStock(stockMap.get(trade.getStock().getName()), trade.getQuantity());
 					allTrades.add(trade);
 				}
 			}
-			player.updatePortolio(portfolios.get(player).copy());
 		}
 		return allTrades;
 	}
@@ -77,8 +76,12 @@ public class Market {
 		return prices;
 	}
 	
-	public double getTransactionFee() {
-		return transactionFee;
+	public static double getTransactionFee() {
+		return marketTransactionFee;
+	}
+	
+	public static double getPlayerStartingCapital() {
+		return playerStartingCapital;
 	}
 	
 	public Boolean allBankrupt(){
@@ -86,6 +89,10 @@ public class Market {
 			if (portfolio.getMonetaryValue() > 0) return false;
 		}
 		return true;
+	}
+	
+	public static int getMaxRounds(){
+		return Simulator.MAX_ROUNDS;
 	}
 
 	/**
@@ -117,5 +124,4 @@ public class Market {
 	public Portfolio getPortfolio(Player player) {
 		return portfolios.get(player);
 	}
-	
 }

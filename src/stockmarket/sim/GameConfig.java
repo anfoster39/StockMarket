@@ -35,9 +35,8 @@ public class GameConfig implements Cloneable{
 		this.playerClass = playerClass;
 	}
 
-
-	public ArrayList<Player> getPlayers() {
-		return players;
+	public ArrayList<Class<Player>> getPlayers() {
+		return availablePlayers;
 	}
 
 	ArrayList<Player> players;
@@ -93,6 +92,7 @@ public class GameConfig implements Cloneable{
 	 * Get the game configuration parameters out of the Property object.
 	 * 
 	 */
+	@SuppressWarnings("unchecked")
 	private void extractProperties() {
 		String s;
 
@@ -121,7 +121,8 @@ public class GameConfig implements Cloneable{
 					if(c.getName().endsWith(".class") ){
 						String className = c.toString().replaceAll("/", ".").replace("bin.","");
 						className = className.substring(0, className.length() - 6);
-						 Class theClass = null;
+						 @SuppressWarnings("rawtypes")
+						Class theClass = null;
 				          try{
 				            theClass = Class.forName(className, false,this.getClass().getClassLoader());
 				            if(theClass.getSuperclass() != null && theClass.getSuperclass().toString().equals("class stockmarket.sim.Player"))
@@ -144,7 +145,8 @@ public class GameConfig implements Cloneable{
 							if(ca.getName().endsWith(".class") ){
 								String className = ca.toString().replace(c.toString(),"").replaceAll("/", ".");
 								className = className.substring(0, className.length() - 6);
-								 Class theClass = null;
+								 @SuppressWarnings("rawtypes")
+								Class theClass = null;
 						          try{
 						            theClass = Class.forName(className, false,this.getClass().getClassLoader());
 						            if(theClass.getSuperclass() != null && theClass.getSuperclass().toString().equals("class stockmarket.sim.Player"))
@@ -169,6 +171,7 @@ public class GameConfig implements Cloneable{
 				}
 			}
 		}
+		num_players = availablePlayers.size();
 		if (availablePlayers.size() == 0){
 			System.out.println("No player classes loaded!!!");
 			System.exit(-1);

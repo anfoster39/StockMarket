@@ -15,6 +15,13 @@ public class Trade {
 	private int quantity;
 	private int type;
 	
+	public Trade (int type, Stock stock, int quantity){
+		this.type = type;
+		this.stock = stock;
+		this.quantity = quantity;
+	}
+	
+	
 	public Stock getStock() {
 		return stock;
 	}
@@ -47,11 +54,7 @@ public class Trade {
 		return (stock.getPrice() * quantity);
 	}	
 	
-	public Trade (int type, Stock stock, int quantity){
-		this.type = type;
-		this.stock = stock;
-		this.quantity = quantity;
-	}
+	
 	
 	@Override
 	public String toString() {

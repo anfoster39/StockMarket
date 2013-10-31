@@ -3,7 +3,7 @@
  */
 package stockmarket.sim;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * @author Anne
@@ -12,16 +12,16 @@ import java.util.HashMap;
 public class EconomicIndicator {
 	private String name;
 	private double value;
-	private HashMap<Integer, Double> history;
+	private ArrayList<Double> history;
 	
 	public EconomicIndicator(String name, double initialValue){
 		this.name = name;
 		value = initialValue;
-		history = new HashMap<Integer, Double>();
-		history.put(0, initialValue);
+		history = new ArrayList<Double>();
+		history.add(initialValue);
 	}
 	
-	public EconomicIndicator(String _name, double currentValue, HashMap<Integer, Double> history){
+	public EconomicIndicator(String _name, double currentValue, ArrayList<Double> history){
 		name = _name;
 		this.value = currentValue;
 		this.history = history;
@@ -29,10 +29,10 @@ public class EconomicIndicator {
 	
 	public void updateValue (Integer round, double newValue){
 		value = newValue;
-		history.put(round, newValue);
+		history.add(round, newValue);
 	}
 	
-	public double getValue(){
+	public double currentValue(){
 		return value;
 	}
 	
@@ -40,7 +40,7 @@ public class EconomicIndicator {
 		return history.get(round);
 	}
 	
-	public HashMap<Integer, Double> getHistory(){
+	public ArrayList<Double> getHistory(){
 		return history;
 	}
 	
@@ -54,9 +54,9 @@ public class EconomicIndicator {
 	}
 
 	public EconomicIndicator copy(){
-		HashMap<Integer, Double> copyHistory = new HashMap<Integer, Double>();
-		for (Integer round : history.keySet()){
-			copyHistory.put(round, history.get(round));
+		ArrayList<Double> copyHistory = new ArrayList<Double>();
+		for (int i = 0; i < history.size(); i++){
+			copyHistory.add(history.get(i));
 		}
 		return new EconomicIndicator(name, value, copyHistory);
 	}

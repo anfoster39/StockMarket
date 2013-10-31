@@ -5,49 +5,33 @@ package stockmarket.sim;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Random;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.lang.Math;
 
 
-/**
- * this class generates the economic indicators and stock price
- *   each round. It will first create the test data for the player to learn by
- *   generating a number of rounds of economic indicators and stock prices.
- *   It will then go into live mode where it notifies the Market it is a new 
- *   round and give it the indicators whereafter the market will get the player
- *   trades. The Simulator will then update the price of each stock based on a 
- *   secret formula based on the economic indicators. This continues until the 
- *   the round limit is hit or Player goes bankrupt. At the end of the game the 
- *   Simulator prints out the score.
- *
- */
 public class Simulator {
 
     private static Random           random;
-	private double 					STARTING_CAPITAL				=100000;
+	private double 					STARTING_CAPITAL				= 100000;
 	private double					TRANSACTIONFEE					= 5;
-	public int 						NUM_STOCKS						=10;
-    public static final int        	MAX_ROUNDS     					=500;
-	private static final int		TRAINING_ROUNDS					=25;
-	private static final double		PROB_NO_INFLUANCE	  		 	=.3;
-	private static final double		STRENGTH_OF_TRENDS	  		 	=.5;
-	private static final double		RANDOM_STOCK_VARIATIONLIMIT 	=.2;
-	public static final int			STOCK_MAX_PRICE					= 800;
-	public static final int			STOCK_MIN_PRICE					= 50;
+	private int 					NUM_STOCKS						= 10;
+    public static final int        	MAX_ROUNDS     					= 500;
+	private static final int		TRAINING_ROUNDS					= 25;
+	private static final double		PROB_NO_INFLUANCE	  		 	= .3;
+	private static final double		STRENGTH_OF_TRENDS	  		 	= .5;
+	private static final double		RANDOM_STOCK_VARIATIONLIMIT 	= .2;
+	private static final int		STOCK_MAX_PRICE					= 800;
+	private static final int		STOCK_MIN_PRICE					= 50;
 
 	private GameConfig config;
-	public HashMap <Stock, ArrayList<Double>> calculateStocks; 
-	public ArrayList<EconomicIndicator> indicators;
-	public ArrayList<Double> indicatorsMax;
-	public ArrayList<Double> indicatorsMin;
-	public ArrayList<Stock> stocks;
-	public ArrayList<Player> players;
-	public ArrayList<String> stockNames;
-	public Market market;
+	private HashMap <Stock, ArrayList<Double>> calculateStocks; 
+	private ArrayList<EconomicIndicator> indicators;
+	private ArrayList<Double> indicatorsMax;
+	private ArrayList<Double> indicatorsMin;
+	private ArrayList<Stock> stocks;
+	private ArrayList<Player> players;
+	private ArrayList<String> stockNames;
+	private Market market;
 	
 	public Simulator(String filename){
 		random = new Random();
@@ -70,27 +54,6 @@ public class Simulator {
 		run();
 	}
 	
-	//for testing
-	public Simulator(){
-		random = new Random();
-		stockNames = new ArrayList<String>();
-		
-		indicators = new ArrayList<EconomicIndicator> ();
-		stocks = new ArrayList<Stock>();
-		players = new ArrayList<Player>();
-		calculateStocks = new HashMap <Stock, ArrayList<Double>>();
-		indicatorsMin = new ArrayList<Double> ();
-		indicatorsMax = new ArrayList<Double> ();
-		
-		
-		createIndicators();
-		createStocks();
-		initializePlayer();
-		
-		market = new Market(players, STARTING_CAPITAL, TRANSACTIONFEE);
-		
-	}
-	
 	public static final void main(String[] args)
 	{
 		if (args.length < 1)
@@ -109,37 +72,28 @@ public class Simulator {
 		for (round = 0; round < TRAINING_ROUNDS; round++){
 			updateIndicatorsTrend(round, indicators);
 			updateStockPrices(round, new ArrayList<Trade>());
-			
 		}
 		
 		market.trainPlayers(indicators, stocks);
 
-		
 		while (!market.allBankrupt() && round <= MAX_ROUNDS){
 			updateIndicatorsTrend(round, indicators);
 			ArrayList<Trade> marketForces = market.newRound(round, indicators, stocks);
 			updateStockPrices(round, marketForces);
-			market.printPorfolios();
+			//printPortfolios();
 			round++;
 		}
 		
-		printResults();
+		System.out.println("\nFINAL PORTFOLIOS: \n");
+		printPortfolios();
 		
 	}
 
 	/**
 	 * 
 	 */
-	private void printResults() {
+	private void printPortfolios() {
 		market.printPorfolios();
-	}
-
-	/**
-	 * For testing
-	 */
-	private void initializePlayer() {
-		players.add(new stockmarket.g0.RandomPlayer());
-		
 	}
 	
 	/**
@@ -147,12 +101,13 @@ public class Simulator {
 	 */
 	private void initializePlayers() {
 		try {
-			players.add(config.availablePlayers.get(0).newInstance());
+			for(int i = 0; i < config.num_players; i ++){
+			ArrayList<Class<Player>> configPlayers = config.getPlayers();
+			players.add(configPlayers.get(i).newInstance());
+			}
 		} catch (InstantiationException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
+		}	
 	}
 
 	public void createIndicators(){
@@ -177,7 +132,7 @@ public class Simulator {
 	 * Creates the formula that determines each stocks's price
 	 * 
 	 */
-	public void createStocks(){
+	private void createStocks(){
 		//does not check case where all coefficients are 0 
 		for (int i = 0; i < NUM_STOCKS; i++){
 			Stock stock = new Stock (createStockName(), random.nextInt(STOCK_MAX_PRICE-(STOCK_MIN_PRICE*5))+(STOCK_MIN_PRICE*5));
@@ -229,7 +184,7 @@ public class Simulator {
 	/**
 	 * Generates 3 letter stock names and checks for duplicate names 
 	 */
-	public String createStockName(){
+	private String createStockName(){
 		String name = "" + (char)('A' + Math.abs(random.nextInt() % 25)) +					
 						   (char)('A' + Math.abs(random.nextInt() % 25)) + 
 						   (char)('A' + Math.abs(random.nextInt() % 25));
@@ -242,11 +197,11 @@ public class Simulator {
 	
 	/**
 	 * Creates the coefficient for a stock equation
-	 * All coefficients are between -1 and 1 and have a
+	 * All coefficients are between -10 and 12 and have a
 	 * certain percentage change of being 0
 	 * @return
 	 */
-	public double generateCoefficient(){
+	private double generateCoefficient(){
 		if (random.nextDouble() < PROB_NO_INFLUANCE) return 0.0; 
 		int coefficient = -1; 
 		if(random.nextBoolean()) coefficient = 1;
@@ -263,7 +218,7 @@ public class Simulator {
                     - if the amount going up is small a smaller chance of staying the same direction
 	 * @param round
 	 */
-	public void updateIndicatorsTrend (int round, ArrayList<EconomicIndicator> indicators){
+	private void updateIndicatorsTrend (int round, ArrayList<EconomicIndicator> indicators){
 		for(int i = 0; i < indicators.size(); i++){
 			int direction = 1;
 			double change = .5;
@@ -286,20 +241,20 @@ public class Simulator {
 			}
 			
 				//to stay in range
-				if (indicators.get(i).getValue() >= indicatorsMax.get(i)*(1-incriment)){
+				if (indicators.get(i).currentValue() >= indicatorsMax.get(i)*(1-incriment)){
 					direction = -1;
 				}
-				if (indicators.get(i).getValue() <= indicatorsMin.get(i)*(1+incriment)){
+				if (indicators.get(i).currentValue() <= indicatorsMin.get(i)*(1+incriment)){
 					direction = 1;
 				}	
 				
 			double update = 1 + (direction*getRandomBetween(0, incriment));
-			double newPrice = indicators.get(i).getValue()* update;
+			double newPrice = indicators.get(i).currentValue()* update;
 			indicators.get(i).updateValue(round, (newPrice));
 		}
 	}
 
-	public void updateStockPrices(int round, ArrayList<Trade> marketTrades){
+	private void updateStockPrices(int round, ArrayList<Trade> marketTrades){
 		for (Stock stock : stocks){
 			updateStockPrice(round, stock, marketTrades, calculateStocks.get(stock));
 		}
@@ -310,7 +265,7 @@ public class Simulator {
 	 * stock
 	 * @param round The current round
 	 */
-	public void updateStockPrice(int round, Stock stock, ArrayList<Trade> marketTrades, ArrayList<Double> formula){
+	private void updateStockPrice(int round, Stock stock, ArrayList<Trade> marketTrades, ArrayList<Double> formula){
 		int popularity = 0;
 		for(Trade trade : marketTrades){
 			if (trade.getStock() == stock){
@@ -329,13 +284,13 @@ public class Simulator {
 	 * @param stock To update
 	 * @return the new price of the stock
 	 */
-	public double calculateStockPrice(Stock stock, int popularity, ArrayList<Double> formula){
+	private double calculateStockPrice(Stock stock, int popularity, ArrayList<Double> formula){
 		double newPrice = 0;
 		newPrice += RANDOM_STOCK_VARIATIONLIMIT * random.nextDouble();
 		
 		//change from indicators
 		for (int i = 0; i < indicators.size(); i++){
-			newPrice += indicators.get(i).getValue() * formula.get(i);
+			newPrice += indicators.get(i).currentValue() * formula.get(i);
 		}
 		//market adjustment based on how much the stock has been bought or sold
 		double sharesAvabilble = getMarketSize() /stock.getPrice();
@@ -343,21 +298,17 @@ public class Simulator {
 		return newPrice;
 	}
 	
-	public double calculateBasicStockPrice(Stock stock, ArrayList<EconomicIndicator> indicators, ArrayList<Double> formula){
+	private double calculateBasicStockPrice(Stock stock, ArrayList<EconomicIndicator> indicators, ArrayList<Double> formula){
 		double newPrice = 0;
 		newPrice += RANDOM_STOCK_VARIATIONLIMIT * random.nextDouble();
 		
 		//change from indicators
 		for (int i = 0; i < indicators.size(); i++){
-			newPrice += indicators.get(i).getValue() * formula.get(i);
+			newPrice += indicators.get(i).currentValue() * formula.get(i);
 		}
 		return newPrice;
 	}
-	
-	/**
-	 * Used to get the size of the market to calculate the number of shares for a certain stock.
-	 * @return
-	 */
+
 	private double getMarketSize(){
 		double size =0;
 		for (Player player : players){
@@ -367,21 +318,14 @@ public class Simulator {
 	}
 	
 	
-	public double getRandomBetween(double lowerBound, double upperBound){
+	private double getRandomBetween(double lowerBound, double upperBound){
 		return (random.nextDouble()*(upperBound-lowerBound)) + lowerBound; 
 	}
 	
-	public double normalizeRandom(double lowerBound, double upperBound, double value){
+	private double normalizeRandom(double lowerBound, double upperBound, double value){
 		return (value / (upperBound-lowerBound)) - lowerBound;
 	}
 	
-	private ArrayList<Stock> copyStocks(ArrayList<Stock> original){
-		ArrayList<Stock> copy = new ArrayList<Stock>();
-		for (Stock item : original){
-			copy.add(item.copy());
-		}
-		return copy;
-	}
 	
 	private ArrayList<EconomicIndicator> copyIndicaotrs(ArrayList<EconomicIndicator> original){
 		ArrayList<EconomicIndicator> copy = new ArrayList<EconomicIndicator>();

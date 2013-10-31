@@ -15,23 +15,16 @@ import java.util.ArrayList;
  *
  */
 public abstract class Player {
-	public static final int BUY    = 1;
-	public static final int SELL   = -1;
 	public String name;
-	public Portfolio portfolio;
 
 	public abstract void learnStocks(ArrayList<EconomicIndicator> indicators,
 			ArrayList<Stock> stocks);
 
 	public abstract ArrayList<Trade> placeTrade(int currentRound, ArrayList<EconomicIndicator> indicators,
-			ArrayList<Stock> stocks, Portfolio myPorfolio);
+			ArrayList<Stock> stocks, Portfolio porfolioCopy);
 	
 	public String getName(){
 		return name;
 	}
-	
-	public void updatePortolio(Portfolio portfolio){
-		this.portfolio = portfolio;
-	}
-	
+
 }

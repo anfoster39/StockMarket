@@ -3,7 +3,8 @@
  */
 package stockmarket.sim;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+
 
 /**
  * This class holds the stock price and historical prices based on round
@@ -12,16 +13,16 @@ import java.util.HashMap;
 public class Stock {
 	private String name;
 	private double price;
-	private HashMap<Integer, Double> history;
+	private ArrayList<Double> history;
 
 	public Stock (String _name, double initialPrice){
 		name = _name;
-		history = new HashMap<Integer, Double>(); 
+		history = new ArrayList<Double>(); 
 		price = initialPrice;
-		history.put(0, initialPrice);
+		history.add(initialPrice);
 	}
 	
-	public Stock (String _name, double currentPrice, HashMap<Integer, Double> history){
+	public Stock (String _name, double currentPrice, ArrayList<Double> history){
 		name = _name;
 		this.history = history; 
 		price = currentPrice;
@@ -29,7 +30,7 @@ public class Stock {
 	
 	public void updatePrice (Integer round, double newPrice){
 		price = newPrice;
-		history.put(round, newPrice);
+		history.add(round, newPrice);
 	}
 	
 	public double getPrice(){
@@ -40,7 +41,7 @@ public class Stock {
 		return history.get(round);
 	}
 	
-	public HashMap<Integer, Double> getPriceHistory(){
+	public ArrayList<Double> getPriceHistory(){
 		return history;
 	}
 	
@@ -54,9 +55,9 @@ public class Stock {
 	}
 	
 	public Stock copy(){
-		HashMap<Integer, Double> copyHistory = new HashMap<Integer, Double>();
-		for (Integer round : history.keySet()){
-			copyHistory.put(round, history.get(round));
+		ArrayList<Double> copyHistory = new ArrayList<Double>();
+		for (int i = 0; i < history.size(); i++){
+			copyHistory.add(history.get(i));
 		}
 		return new Stock(name, price, copyHistory);
 	}
