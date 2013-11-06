@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public abstract class Player {
 	public String name;
 
-	public abstract void learnStocks(ArrayList<EconomicIndicator> indicators,
+	public abstract void learn(ArrayList<EconomicIndicator> indicators,
 			ArrayList<Stock> stocks);
 
 	public abstract ArrayList<Trade> placeTrade(int currentRound, ArrayList<EconomicIndicator> indicators,

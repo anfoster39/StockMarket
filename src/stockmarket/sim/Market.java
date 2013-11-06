@@ -31,7 +31,7 @@ public class Market {
 	
 	public void trainPlayers(ArrayList<EconomicIndicator> indicators, ArrayList<Stock> stocks){
 		for(Player player : players){
-			player.learnStocks(copyIndicaotrs(indicators), copyStocks(stocks));
+			player.learn(copyIndicaotrs(indicators), copyStocks(stocks));
 		}	
 	}
 
@@ -48,13 +48,13 @@ public class Market {
 				continue;
 			}
 			for (Trade trade : trades){
-				if(trade.getType() == Trade.SELL){
+				if(trade.getAction() == Trade.SELL){
 					portfolios.get(player).sellStock(stockMap.get(trade.getStock().getName()), trade.getQuantity());
 					allTrades.add(trade);
 				}
 			}
 			for (Trade trade : trades){
-				if(trade.getType() == Trade.BUY){
+				if(trade.getAction() == Trade.BUY){
 					portfolios.get(player).buyStock(stockMap.get(trade.getStock().getName()), trade.getQuantity());
 					allTrades.add(trade);
 				}

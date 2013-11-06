@@ -33,7 +33,7 @@ public class Stock {
 		history.add(round, newPrice);
 	}
 	
-	public double getPrice(){
+	public double currentPrice(){
 		return price;
 	}
 	
@@ -41,7 +41,7 @@ public class Stock {
 		return history.get(round);
 	}
 	
-	public ArrayList<Double> getPriceHistory(){
+	public ArrayList<Double> getHistory(){
 		return history;
 	}
 	
@@ -61,4 +61,5 @@ public class Stock {
 		}
 		return new Stock(name, price, copyHistory);
 	}
+
 }

@@ -13,10 +13,10 @@ public class Trade {
 	
 	private Stock stock;
 	private int quantity;
-	private int type;
+	private int action;
 	
-	public Trade (int type, Stock stock, int quantity){
-		this.type = type;
+	public Trade (int action, Stock stock, int quantity){
+		this.action = action;
 		this.stock = stock;
 		this.quantity = quantity;
 	}
@@ -42,28 +42,28 @@ public class Trade {
 		this.quantity = quantity;
 	}
 
-	public int getType() {
-		return type;
+	public int getAction() {
+		return action;
 	}
 
-	public void setType(int type) {
-		this.type = type;
+	public void setAction(int action) {
+		this.action = action;
 	}	
 	
 	public double getCostBeforeTransactionFee() {
-		return (stock.getPrice() * quantity);
+		return (stock.currentPrice() * quantity);
 	}	
 	
 	
 	
 	@Override
 	public String toString() {
-		if (type == BUY){
+		if (action == BUY){
 			return "Trade: [ Buy " + quantity + " shares of "+ stock.getName() 
-					+ " at " + stock.getPrice() + "]";
+					+ " at " + stock.currentPrice() + "]";
 		}
 		return "Trade: [ Sell " + quantity + " shares of "+ stock.getName() 
-				+ " at " + stock.getPrice() + "]";
+				+ " at " + stock.currentPrice() + "]";
 	}
 	
 

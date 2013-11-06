@@ -45,7 +45,10 @@ Structure:
   ------------
 Ideas for future implementations:
 
-    * Tweak Stock coefficients to have very different trends
+    Give List of other portfolios in multiplayer version
+    look into having a certain amount of stock in the markt
+
+    Done Tweak Stock coefficients to have very different trends
     Done Market to give the portfolio during place trade
 
     Done Make a copy of the indicators and stocks to give to the players

@@ -15,13 +15,16 @@ public class Simulator {
 	private double 					STARTING_CAPITAL				= 100000;
 	private double					TRANSACTIONFEE					= 5;
 	private int 					NUM_STOCKS						= 10;
-    public static final int        	MAX_ROUNDS     					= 500;
+    public static final int        	MAX_ROUNDS     					= 26;
 	private static final int		TRAINING_ROUNDS					= 25;
 	private static final double		PROB_NO_INFLUANCE	  		 	= .3;
 	private static final double		STRENGTH_OF_TRENDS	  		 	= .5;
-	private static final double		RANDOM_STOCK_VARIATIONLIMIT 	= .2;
+	private static final double		RANDOM_STOCK_VARIATIONLIMIT 	= .002;
 	private static final int		STOCK_MAX_PRICE					= 800;
 	private static final int		STOCK_MIN_PRICE					= 50;
+	
+	private static final String HEADER_STRING = "CIS 700 Fall 2013 -- Stock Market simulation";
+	private static final String VERSION = "v1.0";
 
 	private GameConfig config;
 	private HashMap <Stock, ArrayList<Double>> calculateStocks; 
@@ -61,6 +64,7 @@ public class Simulator {
 			System.out.println("Quitting, no players given");
 			System.exit(-1);
 		}
+		System.out.println(HEADER_STRING + " "+ VERSION + "\n");
 		Simulator game = new Simulator(args[0]);
 	}
 	
@@ -84,6 +88,7 @@ public class Simulator {
 			round++;
 		}
 		
+		System.out.println("\n====================================================");
 		System.out.println("\nFINAL PORTFOLIOS: \n");
 		printPortfolios();
 		
@@ -174,7 +179,7 @@ public class Simulator {
 		for (int i = 1; i < MAX_ROUNDS*2; i++){
 			updateIndicatorsTrend(i, testindicators);
 			stock.updatePrice(i, calculateBasicStockPrice(stock, testindicators, formula));
-			if(stock.getPrice() >= STOCK_MAX_PRICE || stock.getPrice() <= (STOCK_MIN_PRICE)){
+			if(stock.currentPrice() >= STOCK_MAX_PRICE || stock.currentPrice() <= (STOCK_MIN_PRICE)){
 				return false;
 			}
 		}	
@@ -268,7 +273,7 @@ public class Simulator {
 	private void updateStockPrice(int round, Stock stock, ArrayList<Trade> marketTrades, ArrayList<Double> formula){
 		int popularity = 0;
 		for(Trade trade : marketTrades){
-			if (trade.getStock() == stock){
+			if (trade.getStock().getName() == stock.getName()){
 				popularity += trade.getQuantity();
 			}
 		}
@@ -286,14 +291,14 @@ public class Simulator {
 	 */
 	private double calculateStockPrice(Stock stock, int popularity, ArrayList<Double> formula){
 		double newPrice = 0;
-		newPrice += RANDOM_STOCK_VARIATIONLIMIT * random.nextDouble();
+		newPrice += (stock.currentPrice() * getRandomBetween(-1*RANDOM_STOCK_VARIATIONLIMIT, RANDOM_STOCK_VARIATIONLIMIT));
 		
 		//change from indicators
 		for (int i = 0; i < indicators.size(); i++){
 			newPrice += indicators.get(i).currentValue() * formula.get(i);
 		}
 		//market adjustment based on how much the stock has been bought or sold
-		double sharesAvabilble = getMarketSize() /stock.getPrice();
+		double sharesAvabilble = getMarketSize() /stock.currentPrice();
 		newPrice *= 1 + (popularity / sharesAvabilble);
 		return newPrice;
 	}

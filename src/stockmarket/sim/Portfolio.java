@@ -27,7 +27,7 @@ public class Portfolio {
 			     HashMap <Stock, Integer> Stocks, double transactionFee){
 		capital = currentCapital;
 		startingMoney = startingCapital;
-		stocks = new HashMap <Stock, Integer>();
+		stocks = Stocks;// new HashMap <Stock, Integer>();
 		this.transactionFee = transactionFee;
 	}
 	
@@ -38,7 +38,7 @@ public class Portfolio {
 	public double getMonetaryValue(){
 		double value = capital;
 		for (Stock stock : stocks.keySet()){
-			value += stock.getPrice() * stocks.get(stock);
+			value += stock.currentPrice() * stocks.get(stock);
 		}
 		return value;
 	}
@@ -51,11 +51,11 @@ public class Portfolio {
 	 * @return If the buy went through
 	 */
 	public boolean buyStock(Stock stock, int amount){
-		if(capital < (stock.getPrice() * amount) + transactionFee) {
+		if(capital < (stock.currentPrice() * amount) + transactionFee) {
 			System.out.println("Trade to Buy " + stock.getName() + " failed: You do not have enough money");
 			return false;
 		}
-		capital -= (stock.getPrice() * amount) + transactionFee;
+		capital -= (stock.currentPrice() * amount) + transactionFee;
 		if (stocks.containsKey(stock)){
 			int oldAmount = stocks.get(stock);
 			stocks.put(stock, amount+oldAmount);
@@ -90,7 +90,7 @@ public class Portfolio {
 		else {
 			stocks.put(stock, holding - amount);	
 		}
-		capital += (stock.getPrice() * amount) - transactionFee;
+		capital += (stock.currentPrice() * amount) - transactionFee;
 		return true;
 	}
 	
